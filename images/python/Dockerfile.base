@@ -1,0 +1,7 @@
+# Python Whanos base image
+FROM python:3.12.0-alpine3.18
+
+ONBUILD COPY . /app
+ONBUILD WORKDIR /app
+ONBUILD RUN pip install -r requirements.txt
+ONBUILD CMD ["python", "-m", "app"]

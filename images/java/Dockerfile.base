@@ -1,0 +1,7 @@
+# Java Whanos base image
+FROM openjdk:21-jdk
+
+ONBUILD COPY . /app
+ONBUILD WORKDIR /app
+ONBUILD RUN mvn package
+ONBUILD CMD ["java", "-jar", "app.jar"]

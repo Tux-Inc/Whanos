@@ -1,0 +1,7 @@
+# NodeJS Whanos base image
+FROM node:20.9-alpine3.18
+
+ONBUILD COPY . /app
+ONBUILD WORKDIR /app
+ONBUILD RUN npm install
+ONBUILD CMD ["node", "."]

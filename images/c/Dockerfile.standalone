@@ -1,0 +1,7 @@
+# C Whanos standalone image
+FROM gcc:13.2
+
+COPY . /app
+WORKDIR /app
+RUN make
+CMD ["./compiled-app"]

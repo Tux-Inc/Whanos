@@ -1,0 +1,6 @@
+# Befunge Whanos base image
+FROM esolang/befunge93
+
+ONBUILD COPY . /app
+ONBUILD WORKDIR /app
+ONBUILD CMD ["befunge93", "main.bf"]

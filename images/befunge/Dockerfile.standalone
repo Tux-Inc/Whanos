@@ -1,0 +1,6 @@
+# Befunge Whanos standalone image
+FROM esolang/befunge93
+
+COPY . /app
+WORKDIR /app
+CMD ["befunge93", "main.bf"]
