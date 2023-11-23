@@ -1,0 +1,130 @@
+jenkins:
+  controller:
+    # When enabling LDAP or another non-Jenkins identity source, the built-in admin account will no longer exist.
+    # If you disable the non-Jenkins identity store and instead use the Jenkins internal one,
+    # you should revert controller.adminUser to your preferred admin user:
+    adminUser: "admin"
+    adminPassword: "admin"
+    servicePort: 32000 # The port the service listens on (32000 for NodePort, 8080 for LoadBalancer and ClusterIP)
+    # For minikube, set this to NodePort, elsewhere use LoadBalancer
+    # Use ClusterIP if your setup includes ingress controller
+    serviceType: NodePort
+
+    installPlugins:
+      - kubernetes:4029.v5712230ccb_f8
+      - workflow-aggregator:596.v8c21c963d92d
+      - git:5.2.0
+      - configuration-as-code:1670.v564dc8b_982d0
+
+    # List of plugins to install in addition to those listed in controller.installPlugins
+    additionalPlugins:
+      - role-strategy:689.v731678c3e0eb_
+      - job-dsl:1.87
+      - parameterized-trigger:2.46
+      - github:1.37.3.1
+      - ws-cleanup:0.45
+
+    JCasC:
+      defaultConfig: true
+      configScripts:
+        welcome-message: |
+          jenkins:
+            systemMessage: Welcome to our CI\CD server. This Jenkins is Whanos-powered instance!.
+        security-dsl: |
+          security:
+            globalJobDslSecurityConfiguration:
+              useScriptSecurity: false
+        job-config: |
+          jobs:
+            - script: |
+                import java.io.File
+
+                // Utility function to clone the repository and return the directory path
+                def cloneRepoAndGetImagesDir() {
+                    def workspace = new File('/tmp/whanos_repo')
+                    def cloneCommand = "git clone https://github.com/Tux-Inc/Whanos.git /tmp/whanos_repo"
+
+                    // Execute the git clone command
+                    def process = cloneCommand.execute()
+                    process.waitFor()
+
+                    // Check for errors in cloning
+                    if (process.exitValue() != 0) {
+                        println "Error cloning repository: " + process.err.text
+                        return null
+                    }
+
+                    // Return the directory path of the cloned repository
+                    return new File(workspace, "images")
+                }
+
+                def imagesDir = cloneRepoAndGetImagesDir()
+                def languages = []
+
+                if (imagesDir.exists() && imagesDir.isDirectory()) {
+                    def directories = imagesDir.listFiles().findAll { it.isDirectory() }
+                    languages = directories.collect { it.name }
+                    println "Available languages: " + languages
+                } else {
+                    println "Images directory not found or is not a directory, no languages available"
+                }
+
+                folder("Whanos base images") {
+                    description("Whanos base images folder")
+                }
+
+                folder("Projects") {
+                    description("Projects folder")
+                }
+
+                languages.each { language ->
+                    println "Creating job for language: " + language
+                    freeStyleJob("Whanos base images/whanos-$language") {
+                        steps {
+                            shell("docker build $imagesDir/$language -t whanos-$language -f $imagesDir/$language/Dockerfile.base")
+                        }
+                    }
+                }
+
+                freeStyleJob("link-project") {
+                    parameters {
+                        stringParam("GITHUB_NAME", null, "GitHub repository owner/repo_name (e.g.: 'EpitechIT31000/chocolatine')")
+                        stringParam("DISPLAY_NAME", null, "Display name for the job")
+                    }
+                    steps {
+                        dsl {
+                            text('''
+                                freeStyleJob("Projects/$DISPLAY_NAME") {
+                                    wrappers {
+                                        preBuildCleanup()
+                                    }
+                                    scm {
+                                        github("$GITHUB_NAME")
+                                    }
+                                    triggers {
+                                        githubPush()
+                                    }
+                                    steps {
+                                        shell("echo 'TODO: BUILD IMAGE'")
+                                    }
+                                }
+                            ''')
+                        }
+                    }
+                }
+
+    agent:
+      additionalContainers:
+        - sideContainerName: dind
+          image: docker
+          tag: dind
+          command: dockerd-entrypoint.sh
+          args: ""
+          privileged: true
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: 1
+              memory: 2Gi
