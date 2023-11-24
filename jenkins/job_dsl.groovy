@@ -38,32 +38,11 @@ freeStyleJob("link-project") {
     steps {
         dsl {
             text('''
-                pipeline("Projects/$DISPLAY_NAME") {
+                freeStyleJob("Projects/$DISPLAY_NAME") {
                     agent {
                         kubernetes {
-                            yaml \'\'\'
-                                apiVersion: v1
-                                kind: Pod
-                                spec:
-                                containers:
-                                    - name: docker
-                                    image: docker
-                                    command:
-                                        - cat
-                                    tty: true
-                                    volumeMounts:
-                                        - mountPath: /var/run/docker.sock
-                                        name: docker-sock
-                                        - mountPath: /whanos
-                                        name: whanos
-                                volumes:
-                                    - name: docker-sock
-                                    hostPath:
-                                        path: /var/run/docker.sock
-                                    - name: whanos
-                                    hostPath:
-                                        path: /whanos
-                            \'\'\'
+                            yamlFile "/tmp/whanos_repo/jenkins/pod.yaml"
+                            retries 2
                         }
                     }
                     wrappers {
