@@ -39,12 +39,6 @@ freeStyleJob("link-project") {
         dsl {
             text('''
                 freeStyleJob("Projects/$DISPLAY_NAME") {
-                    agent {
-                        kubernetes {
-                            yamlFile "/tmp/whanos_repo/jenkins/pod.yaml"
-                            retries 2
-                        }
-                    }
                     wrappers {
                         preBuildCleanup()
                     }
