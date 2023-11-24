@@ -1,3 +1,32 @@
+import java.io.File
+
+println "Creating Jenkins jobs..."
+
+def cloneRepo() {
+    def workspace = new File('/tmp/whanos_repo')
+    def cloneCommand = "git clone https://github.com/Tux-Inc/Whanos.git /tmp/whanos_repo"
+    def process = cloneCommand.execute()
+    process.waitFor()
+    if (process.exitValue() != 0) {
+        println "Error cloning repository: " + process.err.text
+        return null
+    }
+    return new File(workspace, "images")
+}
+
+def imagesDir = cloneRepo()
+println "Images directory: " + imagesDir
+
+def languages = []
+
+if (imagesDir.exists() && imagesDir.isDirectory()) {
+    def directories = imagesDir.listFiles().findAll { it.isDirectory() }
+    languages = directories.collect { it.name }
+    println "Available languages: " + languages
+} else {
+    println "Images directory not found or is not a directory, no languages available"
+}
+
 folder("Whanos base images") {
     description("Whanos base images folder")
 }
