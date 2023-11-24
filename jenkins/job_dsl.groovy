@@ -38,7 +38,7 @@ freeStyleJob("link-project") {
     steps {
         dsl {
             text('''
-                freeStyleJob("Projects/$DISPLAY_NAME") {
+                pipeline("Projects/$DISPLAY_NAME") {
                     agent {
                         kubernetes {
                             yaml \'\'\'
