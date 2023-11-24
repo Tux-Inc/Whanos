@@ -37,11 +37,11 @@ freeStyleJob("link-project") {
     }
     steps {
         dsl {
-            text("""
+            text('''
                 freeStyleJob("Projects/$DISPLAY_NAME") {
                     agent {
                         kubernetes {
-                            yaml '''
+                            yaml \'\'\'
                                 apiVersion: v1
                                 kind: Pod
                                 spec:
@@ -63,7 +63,7 @@ freeStyleJob("link-project") {
                                     - name: whanos
                                     hostPath:
                                         path: /whanos
-                            '''
+                            \'\'\'
                         }
                     }
                     wrappers {
@@ -84,15 +84,15 @@ freeStyleJob("link-project") {
                         preBuildCleanup()
                     }
                     steps {
-                        shell('''
+                        shell(\'\'\'
                             while true; do
                                 echo "Pulling latest version of the image..."
                                 sleep 60
                             done
-                        ''')
+                        \'\'\')
                     }
                 }
-            """.stripIndent())
+            ''')
         }
     }
 }
