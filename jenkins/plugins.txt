@@ -1,6 +1,0 @@
-configuration-as-code
-script-security
-role-strategy
-job-dsl
-parameterized-trigger
-git

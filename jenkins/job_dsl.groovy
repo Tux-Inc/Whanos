@@ -1,63 +1,16 @@
-import java.io.File
-import hudson.plugins.git.GitSCM
-import hudson.plugins.git.extensions.impl.RelativeTargetDirectory
-import hudson.plugins.git.extensions.impl.CloneOption
-
-// Constants
-final String REPO_URL = "https://github.com/Tux-Inc/Whanos.git"
-final String IMAGES_DIR_RELATIVE_PATH = "images"
-final String BASE_FOLDER_NAME = "Whanos base images"
-final String PROJECTS_FOLDER_NAME = "Projects"
-
-// Utility function to clone the repository and return the directory path
-def cloneRepoAndGetImagesDir() {
-    def workspace = new File('/tmp/whanos_repo')
-    def scm = new GitSCM(REPO_URL)
-    scm.extensions.add(new CloneOption(false, false, "", 10))
-    scm.extensions.add(new RelativeTargetDirectory(workspace.getAbsolutePath()))
-
-    // Clone the repo
-    scm.checkout(null, workspace, null, null, null, null)
-
-    // Return path to images directory
-    return new File(workspace, IMAGES_DIR_RELATIVE_PATH)
-}
-
-def imagesDir = cloneRepoAndGetImagesDir()
-def languages = []
-
-if (imagesDir.exists() && imagesDir.isDirectory()) {
-    def directories = imagesDir.listFiles().findAll { it.isDirectory() }
-    languages = directories.collect { it.name.capitalize() }
-    println "Available languages: " + languages
-} else {
-    println "Images directory not found or is not a directory, no languages available"
-}
-
-folder(BASE_FOLDER_NAME) {
+folder("Whanos base images") {
     description("Whanos base images folder")
 }
 
-folder(PROJECTS_FOLDER_NAME) {
+folder("Projects") {
     description("Projects folder")
 }
 
 languages.each { language ->
-    freeStyleJob("$BASE_FOLDER_NAME/whanos-$language") {
+    println "Creating job for language: " + language
+    freeStyleJob("Whanos base images/whanos-$language") {
         steps {
-            shell("docker build ${imagesDir.absolutePath}/$language -t whanos-$language -f ${imagesDir.absolutePath}/$language/Dockerfile.base")
-        }
-    }
-}
-
-freeStyleJob("$BASE_FOLDER_NAME/Build all base images") {
-    publishers {
-        downstreamParameterized {
-            trigger("$BASE_FOLDER_NAME/whanos-$language", false)
-            condition("SUCCESS")
-            parameters {
-                predefinedProp("language", languages.join(','))
-            }
+            shell("docker build $imagesDir/$language -t whanos-$language -f $imagesDir/$language/Dockerfile.base")
         }
     }
 }
@@ -69,22 +22,62 @@ freeStyleJob("link-project") {
     }
     steps {
         dsl {
-            text('''
+            text("""
                 freeStyleJob("Projects/$DISPLAY_NAME") {
+                    agent {
+                        kubernetes {
+                            yaml '''
+                                apiVersion: v1
+                                kind: Pod
+                                spec:
+                                containers:
+                                    - name: docker
+                                    image: docker
+                                    command:
+                                        - cat
+                                    tty: true
+                                    volumeMounts:
+                                        - mountPath: /var/run/docker.sock
+                                        name: docker-sock
+                                        - mountPath: /whanos
+                                        name: whanos
+                                volumes:
+                                    - name: docker-sock
+                                    hostPath:
+                                        path: /var/run/docker.sock
+                                    - name: whanos
+                                    hostPath:
+                                        path: /whanos
+                            '''
+                        }
+                    }
                     wrappers {
                         preBuildCleanup()
                     }
                     scm {
-                        github("$GITHUB_NAME")
+                        git {
+                            remote {
+                                github("$GITHUB_NAME", "ssh")
+                                credentials('jenkins-ssh-key')
+                            }
+                        }
                     }
                     triggers {
-                        scm("* * * * *")
+                        scm('* * * * *')
+                    }
+                    wrappers {
+                        preBuildCleanup()
                     }
                     steps {
-                        shell("echo 'TODO: BUILD IMAGE'")
+                        shell('''
+                            while true; do
+                                echo "Pulling latest version of the image..."
+                                sleep 60
+                            done
+                        ''')
                     }
                 }
-            ''')
+            """.stripIndent())
         }
     }
 }

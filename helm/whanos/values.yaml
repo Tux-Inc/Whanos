@@ -5,7 +5,8 @@ jenkins:
     # you should revert controller.adminUser to your preferred admin user:
     adminUser: "admin"
     adminPassword: "admin"
-    servicePort: 32000 # The port the service listens on (32000 for NodePort, 8080 for LoadBalancer and ClusterIP)
+    # The port the service listens on (32000 for NodePort, 8080 for LoadBalancer and ClusterIP)
+    servicePort: 32000
     # For minikube, set this to NodePort, elsewhere use LoadBalancer
     # Use ClusterIP if your setup includes ingress controller
     serviceType: NodePort
@@ -22,7 +23,12 @@ jenkins:
       - job-dsl:1.87
       - parameterized-trigger:2.46
       - github:1.37.3.1
+      - credentials:1309.v8835d63eb_d8a_
       - ws-cleanup:0.45
+
+    additionalSecrets:
+      - name: "jenkins-ssh-key-private"
+        value: "-----BEGIN OPENSSH PRIVATE KEY-----\n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\n-----END OPENSSH PRIVATE KEY-----"
 
     JCasC:
       defaultConfig: true
@@ -30,31 +36,48 @@ jenkins:
         welcome-message: |
           jenkins:
             systemMessage: Welcome to our CI\CD server. This Jenkins is Whanos-powered instance!.
-        security-dsl: |
+        credentials-config: |
+          credentials:
+            system:
+              domainCredentials:
+                - credentials:
+                    - basicSSHUserPrivateKey:
+                        scope: GLOBAL
+                        id: "jenkins-ssh-key"
+                        username: "git"
+                        description: "SSH key for git"
+                        privateKeySource:
+                          directEntry:
+                            privateKey: ${jenkins-ssh-key-private}
+        security-global: |
           security:
             globalJobDslSecurityConfiguration:
               useScriptSecurity: false
+            gitHostKeyVerificationConfiguration:
+              sshHostKeyVerificationStrategy:
+                manuallyProvidedKeyVerificationStrategy:
+                  approvedHostKeys: |-
+                    bitbucket.org ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIIazEu89wgQZ4bqs3d63QSMzYVa0MuJ2e2gKTKqu+UUO
+                    git.assembla.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN+whKLd9tzS4IIbZD7rCgly2LNxlvxef4JvwSaL/YZ7
+                    github.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOMqqnkVzrm0SdG6UOoqKLsabgH5C9okWi0dh2l9GKJl
+                    gitlab.com ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAfuCHKVTjquxvt6CM6tdG4SLp1Btn/nOeHHE5UOzRdf
         job-config: |
           jobs:
             - script: |
                 import java.io.File
 
-                // Utility function to clone the repository and return the directory path
                 def cloneRepoAndGetImagesDir() {
                     def workspace = new File('/tmp/whanos_repo')
                     def cloneCommand = "git clone https://github.com/Tux-Inc/Whanos.git /tmp/whanos_repo"
 
-                    // Execute the git clone command
                     def process = cloneCommand.execute()
                     process.waitFor()
 
-                    // Check for errors in cloning
                     if (process.exitValue() != 0) {
                         println "Error cloning repository: " + process.err.text
                         return null
                     }
 
-                    // Return the directory path of the cloned repository
                     return new File(workspace, "images")
                 }
 
@@ -68,50 +91,7 @@ jenkins:
                 } else {
                     println "Images directory not found or is not a directory, no languages available"
                 }
-
-                folder("Whanos base images") {
-                    description("Whanos base images folder")
-                }
-
-                folder("Projects") {
-                    description("Projects folder")
-                }
-
-                languages.each { language ->
-                    println "Creating job for language: " + language
-                    freeStyleJob("Whanos base images/whanos-$language") {
-                        steps {
-                            shell("docker build $imagesDir/$language -t whanos-$language -f $imagesDir/$language/Dockerfile.base")
-                        }
-                    }
-                }
-
-                freeStyleJob("link-project") {
-                    parameters {
-                        stringParam("GITHUB_NAME", null, "GitHub repository owner/repo_name (e.g.: 'EpitechIT31000/chocolatine')")
-                        stringParam("DISPLAY_NAME", null, "Display name for the job")
-                    }
-                    steps {
-                        dsl {
-                            text('''
-                                freeStyleJob("Projects/$DISPLAY_NAME") {
-                                    wrappers {
-                                        preBuildCleanup()
-                                    }
-                                    scm {
-                                        github("$GITHUB_NAME")
-                                    }
-                                    triggers {
-                                        githubPush()
-                                    }
-                                    steps {
-                                        shell("echo 'TODO: BUILD IMAGE'")
-                                    }
-                                }
-                            ''')
-                        }
-                    }
-                }
+            - file: /tmp/whanos_repo/jenkins/job_dsl.groovy
 
     agent:
       additionalContainers:

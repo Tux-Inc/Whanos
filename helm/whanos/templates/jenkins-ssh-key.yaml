@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Secret
+metadata:
+  name: jenkins-ssh-keys
+  annotations:
+    rbac.authorization.kubernetes.io/autoupdate: "true"
+    "helm.sh/hook": pre-install
+    "helm.sh/hook-weight": "-12"
+    "helm.sh/hook-delete-policy": hook-succeeded
+data:
+  private: {{ .Values.jenkins.controller.sshKeyPrivate }}
+  public: {{ .Values.jenkins.controller.sshKeyPublic }}
