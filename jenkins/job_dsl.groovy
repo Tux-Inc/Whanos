@@ -25,7 +25,15 @@ languages.each { language ->
     println "Creating job for language: " + language
     freeStyleJob("Whanos base images/whanos-$language") {
         steps {
-            shell("docker build $imagesDir/$language -t whanos-$language -f $imagesDir/$language/Dockerfile.base")
+            shell("docker build /whanos/images/$language -t whanos-$language -f /whanos/images/$language/Dockerfile.base")
+        }
+    }
+}
+
+freeStyleJob("Whanos base images/Build all base images") {
+    steps {
+        languages.each { language ->
+            shell("docker build /whanos/images/$language -t whanos-$language -f /whanos/images/$language/Dockerfile.base")
         }
     }
 }
