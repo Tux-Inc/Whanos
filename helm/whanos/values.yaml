@@ -82,18 +82,14 @@ jenkins:
 
             - file: /tmp/whanos_repo/jenkins/job_dsl.groovy
 
-    agent:
-      additionalContainers:
-        - sideContainerName: dind
-          image: docker
-          tag: dind
-          command: dockerd-entrypoint.sh
-          args: ""
-          privileged: true
-          resources:
-            requests:
-              cpu: 500m
-              memory: 1Gi
-            limits:
-              cpu: 1
-              memory: 2Gi
+  agent:
+    privileged: true
+    runAsUser: 0
+    runAsGroup: 0
+    volumes:
+      - type: HostPath
+        hostPath: /var/run/docker.sock
+        mountPath: /var/run/docker.sock
+      - type: HostPath
+        hostPath: /whanos
+        mountPath: /whanos

@@ -58,10 +58,7 @@ freeStyleJob("link-project") {
                     }
                     steps {
                         shell(\'\'\'
-                            while true; do
-                                echo "Pulling latest version of the image..."
-                                sleep 60
-                            done
+                            sh -c "/whanos/whanos.sh"
                         \'\'\')
                     }
                 }

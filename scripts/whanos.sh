@@ -1,3 +1,9 @@
+# Install docker-cli
+./install_dockercli.sh
+if [ $? -ne 0 ]; then
+  echo "install_dockercli.sh failed"
+  exit 1
+fi
 
 # Execute detect_language.sh script
 ./detect_language.sh
