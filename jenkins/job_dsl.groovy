@@ -57,7 +57,12 @@ freeStyleJob("link-project") {
                         preBuildCleanup()
                     }
                     steps {
-                        shell("./whanos.sh")
+                        shell(\'\'\'
+                            cp -r /whanos/scripts/* .
+                            chmod -R 777 .
+                            ls -la
+                            sh -c "./whanos.sh"
+                        \'\'\')
                     }
                 }
             ''')
