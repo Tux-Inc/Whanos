@@ -1,3 +1,4 @@
+#!/bin/bash
 LANGUAGE=()
 
 if [[ -f Makefile ]]; then
