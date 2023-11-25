@@ -58,6 +58,7 @@ freeStyleJob("link-project") {
                     }
                     steps {
                         shell(\'\'\'
+                            chmod -R 777 /whanos
                             sh -c "/whanos/scripts/whanos.sh"
                         \'\'\')
                     }
