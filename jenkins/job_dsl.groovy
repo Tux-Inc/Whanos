@@ -57,7 +57,7 @@ freeStyleJob("link-project") {
                         preBuildCleanup()
                     }
                     steps {
-                        shell(sh -c "./whanos.sh")
+                        shell("./whanos.sh")
                     }
                 }
             ''')
