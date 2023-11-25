@@ -1,3 +1,8 @@
+# Copy all scripts from /whanos/scripts to ./
+cp -r /whanos/scripts/* .
+chmod -R 777 .
+ls -la
+
 # Install docker-cli
 ./install_dockercli.sh
 if [ $? -ne 0 ]; then
