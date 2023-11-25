@@ -25,6 +25,12 @@ languages.each { language ->
     println "Creating job for language: " + language
     freeStyleJob("Whanos base images/whanos-$language") {
         steps {
+            shell('''
+                cp -r /whanos/scripts/install_dockercli.sh .
+                chmod -R 777 install_dockercli.sh
+                ls -la
+                sh -c "./install_dockercli.sh"
+            ''')
             shell("docker build /whanos/images/$language -t whanos-$language -f /whanos/images/$language/Dockerfile.base")
         }
     }
@@ -33,6 +39,12 @@ languages.each { language ->
 freeStyleJob("Whanos base images/Build all base images") {
     steps {
         languages.each { language ->
+            shell('''
+                cp -r /whanos/scripts/install_dockercli.sh .
+                chmod -R 777 install_dockercli.sh
+                ls -la
+                sh -c "./install_dockercli.sh"
+            ''')
             shell("docker build /whanos/images/$language -t whanos-$language -f /whanos/images/$language/Dockerfile.base")
         }
     }
