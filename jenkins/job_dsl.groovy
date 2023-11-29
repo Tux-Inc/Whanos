@@ -77,7 +77,7 @@ freeStyleJob("link-project") {
                         preBuildCleanup()
                     }
                     steps {
-                        shell('cp -r /whanos/scripts/* . && chmod -R 777 . && sh -c "./whanos.sh \${GITHUB_NAME}')
+                        shell('cp -r /whanos/scripts/* . && chmod -R 777 . && sh -c "./whanos.sh \${GITHUB_NAME}"')
                     }
                 }
             ''')
