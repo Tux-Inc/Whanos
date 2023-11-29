@@ -52,8 +52,8 @@ freeStyleJob("Whanos base images/Build all base images") {
 
 freeStyleJob("link-project") {
     parameters {
-        stringParam("GITHUB_NAME", null, "GitHub repository owner/repo_name (e.g.: 'EpitechIT31000/chocolatine')")
-        stringParam("DISPLAY_NAME", null, "Display name for the job")
+        stringParam("GITHUB_NAME", null, "GitHub repository owner/repo_name (e.g.: 'Tux-Inc/Whanos-Example-C')")
+        stringParam("DISPLAY_NAME", null, "Display name for the job (MUST BE IN LOWERCASE)")
     }
     steps {
         dsl {
@@ -78,10 +78,8 @@ freeStyleJob("link-project") {
                     }
                     steps {
                         shell(\'\'\'
-                            cp -r /whanos/scripts/* .
-                            chmod -R 777 .
-                            ls -la
-                            sh -c "./whanos.sh \\\"DISPLAY_NAME\\\""
+                            chmod -R 777 /whanos
+                            sh -c "/whanos/whanos.sh \\\"$DISPLAY_NAME\\\""
                         \'\'\')
                     }
                 }
