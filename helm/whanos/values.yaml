@@ -95,4 +95,11 @@ jenkins:
         mountPath: /whanos
     envVars:
       - name: DOCKER_REGISTRY
-        value: "whanos-docker-registry:5000"
+        value: "whanos-docker-registry.local"
+
+docker-registry:
+  ingress:
+    enabled: true
+    hosts:
+      - whanos-docker-registry.local
+    tls: false
