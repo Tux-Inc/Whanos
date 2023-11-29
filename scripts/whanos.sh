@@ -1,4 +1,5 @@
 DISPLAY_NAME=$1
+echo "DISPLAY_NAME: $DISPLAY_NAME"
 
 # Install docker-cli
 ./install_dockercli.sh

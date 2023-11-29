@@ -5,10 +5,10 @@ NAME=$2
 image_name=$DOCKER_REGISTRY/whanos/whanos-$NAME-$LANGUAGE
 
 if [[ -f Dockerfile ]]; then
-	docker build . -t "$image_name"
+	docker build . -t "$image_name" - < /whanos/images/"${LANGUAGE}"/Dockerfile.base
 else
 	docker build . \
-		-f /images/"${LANGUAGE}"/Dockerfile.standalone \
+		-f /whanos/images/"${LANGUAGE}"/Dockerfile.standalone \
 		-t "$image_name"
 fi
 
