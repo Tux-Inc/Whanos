@@ -1,3 +1,5 @@
+DISPLAY_NAME=$1
+
 # Install docker-cli
 ./install_dockercli.sh
 if [ $? -ne 0 ]; then
@@ -16,7 +18,7 @@ fi
 language=$(./detect_language.sh)
 
 # Execute build_image.sh script with the output of detect_language.sh as argument
-./build_image.sh "$language"
+./build_image.sh "$language" "$DISPLAY_NAME"
 if [ $? -ne 0 ]; then
   echo "build_image.sh failed"
   exit 1

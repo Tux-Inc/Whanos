@@ -93,3 +93,6 @@ jenkins:
       - type: HostPath
         hostPath: /whanos
         mountPath: /whanos
+    envVars:
+      - name: DOCKER_REGISTRY
+        value: "whanos-docker-registry:5000"

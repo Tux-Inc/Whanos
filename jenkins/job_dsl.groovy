@@ -38,13 +38,13 @@ languages.each { language ->
 
 freeStyleJob("Whanos base images/Build all base images") {
     steps {
+        shell('''
+            cp -r /whanos/scripts/install_dockercli.sh .
+            chmod -R 777 install_dockercli.sh
+            ls -la
+            sh -c "./install_dockercli.sh"
+        ''')
         languages.each { language ->
-            shell('''
-                cp -r /whanos/scripts/install_dockercli.sh .
-                chmod -R 777 install_dockercli.sh
-                ls -la
-                sh -c "./install_dockercli.sh"
-            ''')
             shell("docker build /whanos/images/$language -t whanos-$language -f /whanos/images/$language/Dockerfile.base")
         }
     }
@@ -81,7 +81,7 @@ freeStyleJob("link-project") {
                             cp -r /whanos/scripts/* .
                             chmod -R 777 .
                             ls -la
-                            sh -c "./whanos.sh"
+                            sh -c "./whanos.sh \\\"DISPLAY_NAME\\\""
                         \'\'\')
                     }
                 }
