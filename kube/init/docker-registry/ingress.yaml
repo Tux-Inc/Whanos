@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  annotations:
+    cert-manager.io/cluster-issuer: selfsigned-issuer
+  name: docker-registry
+  namespace: docker-registry
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - whanos-registry.local
+      secretName: registry-tls
+  rules:
+    - host: whanos-registry.local
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: docker-registry
+                port:
+                  number: 5000

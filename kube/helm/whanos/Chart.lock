@@ -1,0 +1,12 @@
+dependencies:
+- name: jenkins
+  repository: https://charts.jenkins.io
+  version: 4.8.3
+- name: docker-registry
+  repository: https://helm.twun.io
+  version: 2.2.2
+- name: nginx-ingress
+  repository: https://helm.nginx.com/stable
+  version: 1.0.2
+digest: sha256:e2833a772c4622b364121c3e2d2d3f0aafeccbba7766d6e7891fcd56fa9667e3
+generated: "2023-11-30T12:56:46.739367+01:00"

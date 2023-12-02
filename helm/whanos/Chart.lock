@@ -1,9 +1,0 @@
-dependencies:
-- name: jenkins
-  repository: https://charts.jenkins.io
-  version: 4.8.3
-- name: docker-registry
-  repository: https://helm.twun.io
-  version: 2.2.2
-digest: sha256:eaac35bb7dbe027e8bd9b16fc4857262b748e6349ef3d0fb49ddcc24abf19b15
-generated: "2023-11-21T18:02:26.770875+01:00"
