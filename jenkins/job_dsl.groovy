@@ -77,8 +77,10 @@ freeStyleJob("link-project") {
                         preBuildCleanup()
                     }
                     steps {
+                        environmentVariables {
+                            env("DISPLAY_NAME", "$DISPLAY_NAME")
+                        }
                         shell('echo "Building project $DISPLAY_NAME"')
-                        shell('export DISPLAY_NAME=$DISPLAY_NAME')
                         shell('cp -r /whanos/scripts/* . && chmod -R 777 . && sh -c "./whanos.sh $DISPLAY_NAME"')
                     }
                 }
