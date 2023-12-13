@@ -1,5 +1,5 @@
 if [[ -f whanos.yml ]]; then
-	helm upgrade -if whanos.yml "$1" /helm/AutoDeploy --set image.image=$image_name --set image.name="$1-name"
+	helm upgrade -if whanos.yml "$1" /whanos/helm/AutoDeploy --set image.image=$image_name --set image.name="$1-name"
 
 	external_ip=""
 	ip_timeout=20

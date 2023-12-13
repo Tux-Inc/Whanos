@@ -9,3 +9,4 @@ $(. /etc/os-release && echo "$VERSION_CODENAME") stable" |   tee /etc/apt/source
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
 apt-get update
 apt-get install -y docker-ce-cli kubectl
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
