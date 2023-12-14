@@ -1,5 +1,11 @@
+#!/bin/bash
+LANGUAGE=$1
+NAME=$2
+
+image_name=$DOCKER_REGISTRY/whanos/whanos-$NAME-$LANGUAGE
+
 if [[ -f whanos.yml ]]; then
-	helm upgrade -if whanos.yml "$1" /whanos/helm/AutoDeploy --set image.image=$image_name --set image.name="$1-name"
+	helm upgrade -if whanos.yml "$NAME" /whanos/helm/whanos-deploy --set image.image="$image_name" --set image.name="$NAME-name"
 
 	external_ip=""
 	ip_timeout=20
@@ -11,14 +17,15 @@ if [[ -f whanos.yml ]]; then
 		fi
 		sleep 5
 		echo -n "."
-		external_ip=$(kubectl get svc $1-lb --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}")
+		external_ip=$(kubectl get svc "$NAME"-lb --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}")
 		ip_timeout=$(($ip_timeout - 1))
 	done
 
 	echo "."
 	echo "$external_ip"
 else
-	if helm status "$1" &> /dev/null; then
-		helm uninstall "$1"
+  exit 0
+	if helm status "$NAME" &> /dev/null; then
+		helm uninstall "$NAME"
 	fi
 fi

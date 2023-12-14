@@ -26,7 +26,7 @@ if [ $? -ne 0 ]; then
 fi
 
 # Execute deploy_image.sh script
-./deploy_image.sh
+./deploy_image.sh "$language" "$DISPLAY_NAME"
 if [ $? -ne 0 ]; then
   echo "deploy_image.sh failed"
   exit 1
