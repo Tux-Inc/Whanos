@@ -10,7 +10,7 @@ if [[ -f whanos.yml ]]; then
   printf "LANGUAGE: %s\n" "$LANGUAGE"
   printf "IMAGE_NAME: %s\n" "$image_name"
   printf "DOCKER_REGISTRY: %s\n" "$DOCKER_REGISTRY"
-	helm upgrade -if whanos.yml "$NAME" /whanos/helm/whanos-deploy --set image.image="$image_name" --set image.name="$NAME-name"
+	helm upgrade -if whanos.yml "$NAME" /whanos/kube/helm/whanos-deploy --set image.image="$image_name" --set image.name="$NAME-name"
 
 	external_ip=""
 	ip_timeout=20

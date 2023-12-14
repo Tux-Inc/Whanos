@@ -97,6 +97,7 @@ jenkins:
     envVars:
       - name: DOCKER_REGISTRY
         value: "whanos-registry.local"
-    serviceAccountAgent:
-      create: true
-      name: "whanos"
+
+  serviceAccountAgent:
+    create: false
+    name: "jenkins"
