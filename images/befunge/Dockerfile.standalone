@@ -1,6 +1,7 @@
 # Befunge Whanos standalone image
-FROM esolang/befunge93
+FROM golang:1.20-alpine
 
+RUN go install github.com/jo-m/gobef93/cmd/gobef93@latest
 COPY . /app
 WORKDIR /app
-CMD ["befunge93", "main.bf"]
+CMD ["gobef93", "main.bf"]
