@@ -86,6 +86,7 @@ jenkins:
     privileged: true
     runAsUser: 0
     runAsGroup: 0
+    podName: "whanos"
     volumes:
       - type: HostPath
         hostPath: /var/run/docker.sock
@@ -96,3 +97,6 @@ jenkins:
     envVars:
       - name: DOCKER_REGISTRY
         value: "whanos-registry.local"
+    serviceAccountAgent:
+      create: true
+      name: "whanos"
