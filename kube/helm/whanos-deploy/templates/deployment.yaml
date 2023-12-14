@@ -33,9 +33,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ .Release.Name }}-lb
+  name: {{ .Release.Name }}-np
 spec:
-  type: LoadBalancer
+  type: NodePort
   ports:
     {{- range .Values.deployment.ports }}
     - targetPort: {{ . }}
