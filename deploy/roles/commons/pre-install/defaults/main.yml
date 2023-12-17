@@ -1,0 +1,4 @@
+packages:
+  - kubelet=1.20.11-00
+  - kubeadm=1.20.11-00
+  - kubectl=1.20.11-00
