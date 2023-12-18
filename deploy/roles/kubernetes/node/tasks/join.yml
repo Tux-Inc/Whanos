@@ -1,15 +1,15 @@
 ---
 
 - name: Reset Kubernetes component
-  shell: "kubeadm reset --force --cri-socket=/var/run/{{ container_runtime }}/{{ container_runtime }}.sock"
+  shell: "kubeadm reset --force --cri-socket=/var/run/containerd/containerd.sock"
   register: reset_cluster
 
 - name: Join to Kubernetes cluster
   when: reset_cluster is succeeded
   shell: |
-    kubeadm join --token {{ token }} \
+    kubeadm join --token b0f7b8.8d1767876297d85c \
                 --discovery-token-unsafe-skip-ca-verification \
-                --cri-socket=/var/run/{{ container_runtime }}/{{ container_runtime }}.sock \
+                --cri-socket=/var/run/containerd/containerd.sock \
                 {{ master_ip }}:6443
   register: join_cluster
   environment:

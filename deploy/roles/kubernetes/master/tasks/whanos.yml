@@ -1,0 +1,13 @@
+---
+
+- name: Create Whanos directory
+  shell: "mkdir /Whanos"
+
+- name: Git checkout Whanos from repository
+  shell: "git clone https://github.com/Tux-Inc/Whanos.git /Whanos"
+
+- name: Changing perm for scripts
+  file: dest=/Whanos/scripts mode=u=rwX,g=rX,o=rX recurse=yes
+
+- name: Master Whanos hydration
+  shell: "sh -c /Whanos/scripts/installation/all.sh"

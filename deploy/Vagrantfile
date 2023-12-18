@@ -1,6 +1,6 @@
 # Variables
 # Image à utiliser
-IMAGE_NAME = "perk/ubuntu-20.04-arm64"
+IMAGE_NAME = "bento/ubuntu-20.04-arm64"
 # RAM
 MEM = 2048
 # Nombre de CPU
@@ -14,11 +14,12 @@ MASTER_IP = "#{NODE_NETWORK_BASE}.10"
 
 Vagrant.configure("2") do |config|
   config.ssh.insert_key = false
+  config.vm.network "public_network", dev: "en0", bridge: "en0", mode: "bridge"
 
   # Configuration de la RAM et du CPU
-  config.vm.provider "qemu" do |qe|
-    qe.memory = MEM
-    qe.smp = CPU
+  config.vm.provider "parallels" do |prl|
+    prl.memory = MEM
+    prl.cpus = CPU
   end
 
   # Configuration du Master

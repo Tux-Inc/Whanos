@@ -26,3 +26,7 @@
   run_once: yes
   ignore_errors: yes
 
+- name: Install Whanos
+  include_tasks: whanos.yml
+  run_once: yes
+
